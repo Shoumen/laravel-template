@@ -7,6 +7,7 @@
             <nav>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="{{ route('dashboard.index') }}">Home</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('user.index') }}">Users</a></li>
                     <li class="breadcrumb-item active">New User</li>
                     <div>
                 </ol>
