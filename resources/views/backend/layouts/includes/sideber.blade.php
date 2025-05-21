@@ -230,6 +230,18 @@
                 </li>
             </ul>
         </li>
+        <li class="nav-item">
+            <a class="nav-link collapsed" data-bs-target="#unit" data-bs-toggle="collapse" href="#">
+                <i class="bi bi-gem"></i><span>Unit</span><i class="bi bi-chevron-down ms-auto"></i>
+            </a>
+            <ul id="unit" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                <li>
+                    <a href="{{ route('unit.index') }}">
+                        <i class="bi bi-circle"></i><span>Unit List</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
     <li>
     <li class="nav-heading">Customer & Supplier </li>
         <li class="nav-item">

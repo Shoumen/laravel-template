@@ -7,6 +7,7 @@ use App\Http\Controllers\Backend\SupplierController;
 use App\Http\Controllers\Backend\CategoryController;
 use App\Http\Controllers\Backend\BrandController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Backend\UnitController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\Backend\UserController;
 use Illuminate\Support\Facades\Route;
@@ -55,6 +56,10 @@ Route::middleware('auth', 'verified')->group(function () {
     Route::resource('category', CategoryController::class)->except(['show', 'edit', 'create']);
     // --------------------> Brand <--------------------
     Route::resource('brand', BrandController::class)->except(['show', 'edit', 'create']);
+
+
+    // --------------------> units <--------------------
+    Route::resource('unit', UnitController::class)->except(['show', 'edit', 'create']);
 
 
 });
