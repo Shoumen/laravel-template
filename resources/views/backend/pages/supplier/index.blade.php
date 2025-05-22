@@ -136,7 +136,7 @@
     </table>
 </section>
 
-{{-----customer add-----}}
+{{-----suplier add-----}}
 <div class="modal fade" id="supplierModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
