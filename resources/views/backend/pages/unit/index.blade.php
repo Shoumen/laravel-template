@@ -66,13 +66,16 @@
                       <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                           <li>
                               <a class="dropdown-item d-flex align-items-center" 
-                                data-bs-toggle="modal" data-bs-target="#editModal-{{$data->id}}" href="#">
-                                  <i class="bi bi-pencil me-2" style="font-size: 14px;"></i> <small>Edit</small>
+                                  data-bs-toggle="modal" data-bs-target="#editModal-{{ $data->id }}" href="#">
+                                  <i class="bi bi-pencil me-2 {{ $data->id == 1 ? 'disabled' : '' }}" style="font-size: 14px;"></i> 
+                                  <small>Edit</small>
                               </a>
                           </li>
                           <li>
-                              <a class="dropdown-item d-flex align-items-center text-danger" href="#">
-                                  <i class="bi bi-trash me-2" style="font-size: 14px;"></i> <small>Delete</small>
+                              <a class="dropdown-item d-flex align-items-center text-danger {{ $data->id == 1 ? 'disabled' : '' }}"
+                                data-bs-toggle="modal" data-bs-target="#deleteModal-{{ $data->id }}" href="#">
+                                  <i class="bi bi-trash me-2" style="font-size: 14px;"></i> 
+                                  <small>Delete</small>
                               </a>
                           </li>
                       </ul>
@@ -87,7 +90,7 @@
                       @method('PUT')
                       @csrf
                       <div class="modal-header">
-                        <h1 class="modal-title fs-5"  id="{{ $data->id }}" >category Edit</h1>
+                        <h1 class="modal-title fs-5"  id="{{ $data->id }}" >Unit Edit</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                       </div>
                        <div class="modal-body">
@@ -95,14 +98,16 @@
                           
                           <div class="col-6">
                             <label for="inputSatability" class="form-label">Unit Name *</label>
-                            <input type="text" class="form-control" name="name" id="inputSatability" placeholder="Enter Unit Name" required>
+                            <input type="text" class="form-control" name="name" id="inputSatability" placeholder="Enter Unit Name" value="{{ $data->name }}" required>
                           </div>
                           <div class="col-6">
                             <label for="related_unit_id" class="form-label">Related Unit*</label>
                             <select class="form-select" id="inputSatability" name="related_unit_id">
                                 <option value="">Select Related Unit</option>
-                                @foreach ($units as $data)
-                                    <option value="{{ $data->id }}">{{ $data->name }}</option>
+                                @foreach ($units as $unit)
+                                    <option value="{{ $unit->id }}"
+                                      @if ($unit->id == $data->related_unit_id) selected @endif>
+                                      {{ $unit->name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -112,7 +117,8 @@
                           </div>
                           <div class="col-6">
                             <label for="inputDue" class="form-label">Related Value *</label>
-                            <input type="number" class="form-control"name="related_value"id="inputDue" placeholder="Enter Related Value">
+                            <input type="number" class="form-control"name="related_value"id="inputDue" placeholder="Enter Related Value" 
+                            value="{{ $data->related_value }}">
                           </div>
                         </div>
                       </div>
@@ -126,11 +132,27 @@
               </div>
 
             {{-- delete modal --}}
-            {{-- <form action="{{ route('customer.destroy', $data->id) }}" method="POST">
-                @csrf
-                @method('DELETE')
-                <x-delete-modal title="Customer" id="{{ $data->id }}" />
-            </form> --}}
+            <div class="modal fade" id="deleteModal-{{ $data->id }}" tabindex="-1" aria-labelledby="deleteModalLabel-{{ $data->id }}" aria-hidden="true">
+              <div class="modal-dialog">
+                  <div class="modal-content">
+                      <div class="modal-header">
+                          <h5 class="modal-title" id="deleteModalLabel-{{ $data->id }}">Confirm Delete</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                          Are you sure you want to delete this item?
+                      </div>
+                      <div class="modal-footer">
+                          <form action="{{ route('unit.destroy', $data->id) }}" method="POST">
+                              @csrf
+                              @method('DELETE')
+                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                              <button type="submit" class="btn btn-danger">Delete</button>
+                          </form>
+                      </div>
+                  </div>
+              </div>
+          </div>
           @empty
               <tr>
                 <td colspan="7">No data found</td>
@@ -148,7 +170,7 @@
       <form action="{{route('unit.store')}}" method="POST">
         @csrf
         <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Add Unit</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">

@@ -52,7 +52,7 @@
                 <td>{{$data->creator ?->name}}</td>
                 <td class="table_data_style_right">
                   <div class="dropdown">
-                      <button class="btn btn-sm btn-light dropdown-toggle" type="button"
+                      <button class="btn btn-sm btn-light dropdown-toggle {{ $data->id == 1 ? 'disabled' : '' }}" type="button"
                           id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                           Action
                       </button>
@@ -64,8 +64,10 @@
                               </a>
                           </li>
                           <li>
-                              <a class="dropdown-item d-flex align-items-center text-danger" href="#">
-                                  <i class="bi bi-trash me-2" style="font-size: 14px;"></i> <small>Delete</small>
+                              <a class="dropdown-item d-flex align-items-center text-danger"
+                                data-bs-toggle="modal" data-bs-target="#deleteModal-{{ $data->id }}" href="#">
+                                  <i class="bi bi-trash me-2" style="font-size: 14px;"></i> 
+                                  <small>Delete</small>
                               </a>
                           </li>
                       </ul>
@@ -121,11 +123,27 @@
               </div>
 
             {{-- delete modal --}}
-            {{-- <form action="{{ route('customer.destroy', $data->id) }}" method="POST">
-                @csrf
-                @method('DELETE')
-                <x-delete-modal title="Customer" id="{{ $data->id }}" />
-            </form> --}}
+            <div class="modal fade" id="deleteModal-{{ $data->id }}" tabindex="-1" aria-labelledby="deleteModalLabel-{{ $data->id }}" aria-hidden="true">
+              <div class="modal-dialog">
+                  <div class="modal-content">
+                      <div class="modal-header">
+                          <h5 class="modal-title" id="deleteModalLabel-{{ $data->id }}">Confirm Delete</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                          Are you sure you want to delete this item?
+                      </div>
+                      <div class="modal-footer">
+                          <form action="{{ route('customer.destroy', $data->id) }}" method="POST">
+                              @csrf
+                              @method('DELETE')
+                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                              <button type="submit" class="btn btn-danger">Delete</button>
+                          </form>
+                      </div>
+                  </div>
+              </div>
+          </div>
           @empty
               <tr>
                 <td colspan="7">No data found</td>
@@ -166,11 +184,11 @@
             </div>
             <div class="col-6">
               <label for="inputSatability" class="form-label">Personal Stability</label>
-              <input type="text" class="form-control" name="personal_blance" id="inputSatability" placeholder="0.00">
+              <input type="number" class="form-control" name="personal_blance" id="inputSatability" placeholder="0.00">
             </div>
             <div class="col-6">
               <label for="inputDue" class="form-label">Due Stability</label>
-              <input type="text" class="form-control"name="personal_due"id="inputDue" placeholder="0.00">
+              <input type="number" class="form-control"name="personal_due"id="inputDue" placeholder="0.00">
             </div>
           </div>
         </div>

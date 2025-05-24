@@ -56,9 +56,16 @@ class SupplierController extends Controller
         return back();
     }
 
-    public function destroy($id)
+     public function destroy(string $id)
     {
+        $supplier = Supplier::find($id);
+        // $transactions = Transaction::where('supplier_id', $id)->get();
+        // foreach ($transactions as $transaction) {
+        //     $transaction->delete();
+        // }
+        $supplier->delete();
+
         toastr()->success('Supplier has been Updated successfully!');
-        return redirect()->route('supplier.index');
+        return back();
     }
 }

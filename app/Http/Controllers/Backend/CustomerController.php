@@ -69,9 +69,12 @@ class CustomerController extends Controller
     public function destroy(string $id)
     {
         $customer = Customer::find($id);
-       
+        // $transactions = Transaction::where('customer_id', $id)->get();
+        // foreach ($transactions as $transaction) {
+        //     $transaction->delete();
+        // }
         $customer->delete();
-        // notify()->success('Customer deleted successfully');
+        toastr()->success('Customer has been Updated successfully!');
         return back();
     }
 }
