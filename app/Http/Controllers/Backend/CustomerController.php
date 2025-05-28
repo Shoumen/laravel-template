@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
+use App\Models\Transaction;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
 class CustomerController extends Controller
@@ -35,7 +38,32 @@ class CustomerController extends Controller
         $customer->personal_balance = $request->personal_blance ?? 0.00;
         $customer->due_balance = $request->personal_due ?? 0.00;
         $customer->created_by = auth()->user()->id;
-        $customer->save();
+        DB::transaction(function() use($request, $customer) {
+            if ($customer->save()) {
+                if ($request->personal_blance != NULL) {
+                    $transaction = new Transaction();
+                    $transaction->transaction_type = 'Personal Balance';
+                    $transaction->date = Carbon::now()->format('Y-m-d');
+                    $transaction->customer_id = $customer->id;
+                    $transaction->debit = $request->personal_blance; //as shop owner we have to pay this amount or advance
+                    // so debit is payable
+                    $transaction->credit = NULL;
+                    $transaction->created_by = auth()->user()->id;
+                    $transaction->save();
+                }
+                if ($request->personal_due != NULL) {
+                    $transaction = new Transaction();
+                    $transaction->transaction_type = 'Personal Due';
+                    $transaction->date = Carbon::now()->format('Y-m-d');
+                    $transaction->customer_id = $customer->id;
+                    $transaction->debit = NULL;
+                    $transaction->credit = $request->personal_due; //as shop owner we have to receive this amount
+                    // so credit is receivable
+                    $transaction->created_by = auth()->user()->id;
+                    $transaction->save();
+                }
+            }
+        });
         toastr()->success('Customer has been Updated successfully!');
         return redirect()->route('customer.index');
     }
@@ -69,10 +97,10 @@ class CustomerController extends Controller
     public function destroy(string $id)
     {
         $customer = Customer::find($id);
-        // $transactions = Transaction::where('customer_id', $id)->get();
-        // foreach ($transactions as $transaction) {
-        //     $transaction->delete();
-        // }
+        $transactions = Transaction::where('customer_id', $id)->get();
+        foreach ($transactions as $transaction) {
+            $transaction->delete();
+        }
         $customer->delete();
         toastr()->success('Customer has been Updated successfully!');
         return back();
