@@ -61,7 +61,16 @@ Route::middleware('auth', 'verified')->group(function () {
     // --------------------> units <--------------------
     Route::resource('unit', UnitController::class)->except(['show', 'edit', 'create']);
 
-
+    // --------------------> Product <--------------------
+    Route::controller(ProductController::class)->group(function () {
+        Route::get('product', 'index')->name('product.index');
+        Route::get('product/create', 'create')->name('product.create');
+        Route::post('product/store', 'store')->name('product.store');
+        Route::get('product/{id}/edit', 'edit')->name('product.edit');
+        Route::put('product/{id}/update', 'update')->name('product.update');
+        Route::get('product/{id}/delete', 'destroy')->name('product.destroy');
+    });
+    
 });
 
 require __DIR__.'/auth.php';
