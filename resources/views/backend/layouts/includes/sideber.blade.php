@@ -195,12 +195,12 @@
             </a>
             <ul id="product" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                 <li>
-                    <a href="icons-bootstrap.html">
+                    <a href="{{ route('product.create') }}">
                         <i class="bi bi-circle"></i><span>Add Product</span>
                     </a>
                 </li>
                 <li>
-                    <a href="icons-remix.html">
+                    <a href="{{ route('product.index') }}">
                         <i class="bi bi-circle"></i><span>Product List</span>
                     </a>
                 </li>   
